@@ -1,43 +1,100 @@
-# How to run tests
+# BDD Login Test Automation
 
-TO RUN:
+This project demonstrates Behavior-Driven Development (BDD) using Playwright with TypeScript for the Practice Test Automation login page.
 
-1. Terminal: to run parallel test : npm test 
-2. To run headless, please go to hooks, and make headless statement true{ headless: true }
-3. To run without parallel : npm run sequencetial
+## Project Structure
 
+```
+├── features/
+│   └── login.feature          # Gherkin BDD scenarios
+├── support/
+│   └── page.ts                # Page Object Model with LoginPage class
+├── tests/
+│   └── login.spec.ts          # Playwright test implementation with BDD Given/When/Then
+├── testdata/
+│   └── testdata.json          # Test data for all scenarios
+├── playwright.config.ts       # Playwright configuration
+└── README.md                  # This file
+```
 
+## BDD Feature Scenarios
 
-# Install the Playwright
+The login feature covers:
 
-===============================
+1. **Positive Login Test** - Valid credentials login flow
+2. **Negative Test - Invalid Username** - Error handling for wrong username
+3. **Negative Test - Invalid Password** - Error handling for wrong password
+4. **Complete Login Flow** - End-to-end login verification
 
-> > Press CTRL + SHIFT + P to open the command panel and type "install Playwright"
+## Test Data
 
-# Prerequisites to setting up VS Code
+All test credentials and scenarios are centralized in `testdata/testdata.json`:
 
-=================================================
+```json
+{
+  "login": {
+    "validCredentials": { "username": "student", "password": "Password123" },
+    "invalidUsername": {
+      "username": "incorrectUser",
+      "password": "Password123"
+    },
+    "invalidPassword": {
+      "username": "student",
+      "password": "incorrectPassword"
+    }
+  }
+}
+```
 
-- NodeJS
-- VS Code Editor
-- Playwright VS Code plugin
+## Page Object Model
 
-# Technologies/Tools used in building the framework
+The `LoginPage` class provides BDD-style methods:
 
-=================================================
+- `navigateToLoginPage()` - **Given**: Navigate to login page
+- `enterUsername(username)` - **When**: Enter username
+- `enterPassword(password)` - **When**: Enter password
+- `clickSubmit()` - **When**: Click submit
+- `login(username, password)` - **When**: Complete login action
+- `verifySuccessfulLogin()` - **Then**: Verify redirect to success page
+- `isErrorMessageDisplayed()` - **Then**: Verify error display
+- `getErrorMessage()` - **Then**: Get error message text
+- `verifySuccessMessage(text)` - **Then**: Verify success message
+- `isLogoutButtonVisible()` - **Then**: Verify logout button
 
-- Visual Studio Code - IDE
-- Playwright - Playwright is an open-source End-to-End (E2E) automation framework
-- Typescript - Programming language
-- Extent Reports - Reporting framework
-- GitHub - Version control
+## Running Tests
 
-# Framework implements below best practices
+```bash
+# Run all login tests
+npm test
 
-=========================================
+# Run with specific browser
+npm test -- --project=chromium
 
-- Code reusability
-- Code readability
-- Scalable automation (demonstrated using multiple test classes)
-- Uses explicit waits
-- Abstraction layer for UI commands like click, fill, etc.
+# Run with headed mode (view browser)
+npm test -- --headed
+
+# Open test report
+npx playwright show-report
+```
+
+## BDD Structure
+
+Each test follows the Given-When-Then format:
+
+```typescript
+test("Scenario: User login with valid credentials", async ({ page }) => {
+  // Given: User is on the login page
+  await loginPage.navigateToLoginPage()
+
+  // When: User enters credentials and submits
+  await loginPage.login(username, password)
+
+  // Then: User should be logged in successfully
+  const currentUrl = await loginPage.verifySuccessfulLogin()
+  expect(currentUrl).toContain("logged-in-successfully")
+})
+```
+
+## Test Website
+
+Tests are run against: https://practicetestautomation.com/practice-test-login/

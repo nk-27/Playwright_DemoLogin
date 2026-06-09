@@ -1,0 +1,31 @@
+{
+  "login": {
+    "validCredentials": {
+      "username": "student",
+      "password": "Password123",
+      "description": "Valid login credentials"
+    },
+    "invalidUsername": {
+      "username": "incorrectUser",
+      "password": "Password123",
+      "expectedError": "Your username is invalid!",
+      "description": "Invalid username with correct password"
+    },
+    "invalidPassword": {
+      "username": "student",
+      "password": "incorrectPassword",
+      "expectedError": "Your password is invalid!",
+      "description": "Correct username with invalid password"
+    },
+    "emptyUsername": {
+      "username": "",
+      "password": "Password123",
+      "description": "Empty username field"
+    },
+    "emptyPassword": {
+      "username": "student",
+      "password": "",
+      "description": "Empty password field"
+    }
+  }
+}
