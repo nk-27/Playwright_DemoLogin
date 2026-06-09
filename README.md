@@ -64,6 +64,9 @@ The `LoginPage` class provides BDD-style methods:
 ## Running Tests
 
 ```bash
+# To download and install all dependencies listed in a project's package.json file
+npm install
+
 # Run all login tests
 npm test
 
