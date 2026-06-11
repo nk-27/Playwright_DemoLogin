@@ -67,6 +67,9 @@ The `LoginPage` class provides BDD-style methods:
 # To download and install all dependencies listed in a project's package.json file
 npm install
 
+# To install the latest version of Playwright Test
+npm install -D @playwright/test@latest
+
 # Run all login tests
 npm test
 
