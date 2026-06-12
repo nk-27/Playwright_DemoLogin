@@ -35,6 +35,7 @@ npx bddgen
 Run all Gherkin scenarios with:
 ```bash
 npx playwright test
+npm install -D @playwright/test@latest
 ```
 Or run the combined generator and test execution script:
 ```bash
