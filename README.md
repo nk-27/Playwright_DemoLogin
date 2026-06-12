@@ -1,106 +1,68 @@
-# BDD Login Test Automation
+# Playwright BDD Login Test Automation
 
-This project demonstrates Behavior-Driven Development (BDD) using Playwright with TypeScript for the Practice Test Automation login page.
+This project demonstrates true Behavior-Driven Development (BDD) using Playwright and TypeScript for the Practice Test Automation login page. It utilizes the `playwright-bdd` library to execute Gherkin `.feature` files directly.
 
 ## Project Structure
 
 ```
 ├── features/
-│   └── login.feature          # Gherkin BDD scenarios
+│   └── login.feature          # Gherkin BDD feature scenarios
 ├── support/
-│   └── page.ts                # Page Object Model with LoginPage class
-├── tests/
-│   └── login.spec.ts          # Playwright test implementation with BDD Given/When/Then
-├── testdata/
-│   └── testdata.json          # Test data for all scenarios
-├── playwright.config.ts       # Playwright configuration
-└── README.md                  # This file
+│   ├── page.ts                # Page Object Model (LoginPage class)
+│   ├── steps.ts               # BDD Step Definitions mapping feature steps to code
+│   ├── locators.ts            # Locator Manager
+│   └── helpers.ts             # Reusable automation helper utilities
+├── playwright.config.ts       # Playwright BDD Configuration
+├── package.json               # Dependencies and scripts
+└── README.md                  # This documentation file
 ```
-
-## BDD Feature Scenarios
-
-The login feature covers:
-
-1. **Positive Login Test** - Valid credentials login flow
-2. **Negative Test - Invalid Username** - Error handling for wrong username
-3. **Negative Test - Invalid Password** - Error handling for wrong password
-4. **Complete Login Flow** - End-to-end login verification
-
-## Test Data
-
-All test credentials and scenarios are centralized in `testdata/testdata.json`:
-
-```json
-{
-  "login": {
-    "validCredentials": { "username": "student", "password": "Password123" },
-    "invalidUsername": {
-      "username": "incorrectUser",
-      "password": "Password123"
-    },
-    "invalidPassword": {
-      "username": "student",
-      "password": "incorrectPassword"
-    }
-  }
-}
-```
-
-## Page Object Model
-
-The `LoginPage` class provides BDD-style methods:
-
-- `navigateToLoginPage()` - **Given**: Navigate to login page
-- `enterUsername(username)` - **When**: Enter username
-- `enterPassword(password)` - **When**: Enter password
-- `clickSubmit()` - **When**: Click submit
-- `login(username, password)` - **When**: Complete login action
-- `verifySuccessfulLogin()` - **Then**: Verify redirect to success page
-- `isErrorMessageDisplayed()` - **Then**: Verify error display
-- `getErrorMessage()` - **Then**: Get error message text
-- `verifySuccessMessage(text)` - **Then**: Verify success message
-- `isLogoutButtonVisible()` - **Then**: Verify logout button
 
 ## Running Tests
 
+### 1. Install Dependencies
 ```bash
-# To download and install all dependencies listed in a project's package.json file
 npm install
+```
 
-# To install the latest version of Playwright Test
-npm install -D @playwright/test@latest
+### 2. Generate Playwright Specs
+Before running the tests, compile the feature files into native Playwright spec files:
+```bash
+npx bddgen
+```
+*(This generates test files inside `.features-gen/` which is automatically ignored by Git).*
 
-# Run all login tests
-npm test
+### 3. Run the Tests
+Run all Gherkin scenarios with:
+```bash
+npx playwright test
+```
+Or run the combined generator and test execution script:
+```bash
+npm run test:bdd
+```
 
-# Run with specific browser
-npm test -- --project=chromium
+### 4. Running with Options
+```bash
+# Run tests in headed mode (to watch the browser action)
+npx playwright test --headed
 
-# Run with headed mode (view browser)
-npm test -- --headed
+# Run in a specific browser (e.g., Chromium)
+npx playwright test --project=chromium
 
-# Open test report
+# Open the HTML Test Report
 npx playwright show-report
 ```
 
-## BDD Structure
+## How It Works
 
-Each test follows the Given-When-Then format:
+1. **Feature Files (`features/login.feature`)**:
+   Tests are written in plain-text Gherkin syntax containing `Given`, `When`, `Then`, and `And` steps.
+2. **Step Definitions (`support/steps.ts`)**:
+   Uses `createBdd` from `playwright-bdd` to map each step to TypeScript code. It injects a custom `loginPage` fixture to interact with the Page Objects.
+3. **Page Objects (`support/page.ts`)**:
+   Encapsulates selectors and page actions (like `fillUsername`, `fillPassword`, `submitForm`) to ensure modularity.
 
-```typescript
-test("Scenario: User login with valid credentials", async ({ page }) => {
-  // Given: User is on the login page
-  await loginPage.navigateToLoginPage()
+## Test Site
+Tests are executed against the Practice Test Automation portal:
+https://practicetestautomation.com/practice-test-login/
 
-  // When: User enters credentials and submits
-  await loginPage.login(username, password)
-
-  // Then: User should be logged in successfully
-  const currentUrl = await loginPage.verifySuccessfulLogin()
-  expect(currentUrl).toContain("logged-in-successfully")
-})
-```
-
-## Test Website
-
-Tests are run against: https://practicetestautomation.com/practice-test-login/

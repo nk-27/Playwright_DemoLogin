@@ -152,7 +152,16 @@ export class LoginPage {
     await fillField(this.page, this.usernameField, credentials.username)
     await fillField(this.page, this.passwordField, credentials.password)
   }
+  async fillUsername(username: string) {
+    await fillField(this.page, this.usernameField, username)
+  }
 
+  /**
+   * When: Fill password field
+   */
+  async fillPassword(password: string) {
+    await fillField(this.page, this.passwordField, password)
+  }
   /**
    * When: Submit login form
    */
